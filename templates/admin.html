@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Painel Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+
+body{
+background: linear-gradient(135deg,#0f0f0f,#1a1a1a);
+font-family: Arial, sans-serif;
+color:white;
+padding:40px;
+}
+
+/* ===== CONTAINER VIDRO ===== */
+.box{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+padding:25px;
+border-radius:20px;
+margin-bottom:40px;
+border:1px solid rgba(255,255,255,0.15);
+box-shadow:0 0 30px rgba(0,0,0,0.5);
+}
+
+h2{
+margin-bottom:20px;
+color:#c9a063;
+}
+
+/* ===== INPUTS ===== */
+input, textarea{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+border:none;
+border-radius:10px;
+outline:none;
+background:rgba(255,255,255,0.15);
+color:white;
+}
+
+button{
+background:#c9a063;
+border:none;
+padding:8px 15px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+margin-top:5px;
+}
+
+button:hover{
+opacity:0.8;
+}
+
+.card-item{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+.top-buttons{
+display:flex;
+justify-content:space-between;
+margin-bottom:30px;
+}
+
+a{
+color:white;
+text-decoration:none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="top-buttons">
+<a href="/">⬅ Voltar ao Site</a>
+<a href="/logout">🚪 Sair</a>
+</div>
+
+<!-- ================= CONFIG ================= -->
+<div class="box">
+<h2>⚙ Configurações Gerais</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+<label>Título do Site</label>
+<input type="text" name="titulo" value="{{ config['titulo'] }}">
+
+<label>Texto da Logo (caso não use imagem)</label>
+<input type="text" name="logo_texto" value="{{ config['logo_texto'] }}">
+
+<label>Upload da Logo (imagem)</label>
+<input type="file" name="logo">
+
+{% if config['logo'] %}
+<p>Logo Atual:</p>
+<img src="{{ url_for('static', filename='uploads/' + config['logo']) }}" style="max-height:80px;">
+<button name="delete_logo" value="1" style="background:#aa4444;margin-top:10px;">
+🗑 Excluir Logo
+</button>
+{% endif %}
+
+<hr style="margin:20px 0;">
+
+<label>WhatsApp</label>
+<input type="text" name="whatsapp" value="{{ config['whatsapp'] }}">
+
+<label>Instagram</label>
+<input type="text" name="instagram" value="{{ config['instagram'] }}">
+
+<label>Facebook</label>
+<input type="text" name="facebook" value="{{ config['facebook'] }}">
+
+<label>Cor Principal</label>
+<input type="text" name="primary_color" value="{{ config['cor'] }}">
+
+<br><br>
+
+<button name="update_config" value="1" style="background:#c9a063;">
+💾 Atualizar Configurações
+</button>
+
+<button name="reset_config" value="1" style="background:#444;margin-left:10px;">
+♻ Resetar Tudo
+</button>
+
+</form>
+</div>
+
+<!-- ================= SERVIÇOS ================= -->
+<div class="box">
+<h2>🛠 Serviços</h2>
+
+<form method="POST" enctype="multipart/form-data">
+<input type="hidden" name="add_servico">
+<input type="text" name="nome" placeholder="Nome do serviço" required>
+<textarea name="descricao" placeholder="Descrição" required></textarea>
+<input type="text" name="valor" placeholder="Valor" required>
+<input type="file" name="img" required>
+<button>Adicionar Serviço</button>
+</form>
+
+<hr>
+
+{% for s in servicos %}
+<div class="card-item">
+<form method="POST" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{{ s['id'] }}">
+<input type="text" name="nome" value="{{ s['nome'] }}">
+<textarea name="descricao">{{ s['descricao'] }}</textarea>
+<input type="text" name="valor" value="{{ s['valor'] }}">
+<input type="file" name="img">
+<button name="update_servico">Atualizar</button>
+<button name="delete_servico">Excluir</button>
+</form>
+</div>
+{% endfor %}
+
+</div>
+
+<!-- ================= PORTFOLIO ================= -->
+<div class="box">
+<h2>🌐 Portfólio</h2>
+
+<form method="POST" enctype="multipart/form-data">
+<input type="hidden" name="add_portfolio">
+<input type="file" name="img" required>
+<input type="text" name="link" placeholder="Link do site real" required>
+<button>Adicionar Projeto</button>
+</form>
+
+<hr>
+
+{% for p in portfolio %}
+<div class="card-item">
+<form method="POST" enctype="multipart/form-data">
+<input type="hidden" name="id" value="{{ p['id'] }}">
+<input type="file" name="img">
+<input type="text" name="link" value="{{ p['link'] }}">
+<button name="update_portfolio">Atualizar</button>
+<button name="delete_portfolio">Excluir</button>
+</form>
+</div>
+{% endfor %}
+</div>
+
+<!-- ================= DEPOIMENTOS ================= -->
+<div class="box">
+<h2>💬 Depoimentos</h2>
+
+{% for d in depoimentos %}
+<div class="card-item">
+<form method="POST">
+<input type="hidden" name="id" value="{{ d['id'] }}">
+<input type="text" name="nome" value="{{ d['nome'] }}">
+<textarea name="texto">{{ d['texto'] }}</textarea>
+<input type="number" name="estrelas" value="{{ d['estrelas'] }}" min="1" max="5">
+<button name="update_depoimento">Atualizar</button>
+<button name="delete_depoimento">Excluir</button>
+</form>
+</div>
+{% endfor %}
+</div>
+
+</body>
+</html>

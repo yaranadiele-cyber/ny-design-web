@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Login Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="center-page">
+
+<div class="glass-box login-card">
+
+    <h2>Área Administrativa</h2>
+
+    <form method="POST">
+
+        <input class="input-premium" 
+               type="text" 
+               name="user" 
+               placeholder="Usuário"
+               required>
+
+        <input class="input-premium" 
+               type="password" 
+               name="pass" 
+               placeholder="Senha"
+               required>
+
+        <button type="submit" class="btn-premium">
+            Entrar
+        </button>
+
+    </form>
+
+    <a href="{{ url_for('index') }}" class="btn-glass voltar-btn">
+        ← Voltar ao Site
+    </a>
+
+</div>
+
+</body>
+</html>

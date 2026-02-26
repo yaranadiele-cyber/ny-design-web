@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ config['titulo'] }}</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+--primary: {{ config['cor'] }};
+}
+</style>
+
+</head>
+<body>
+
+<div id="particles"></div>
+
+<header class="glass-header">
+    <div class="header-container">
+
+        <div class="logo">
+        {% if config['logo'] %}
+            <img src="{{ url_for('static', filename='uploads/' + config['logo']) }}" 
+                 alt="Logo"
+                 style="max-height:70px;">
+        {% else %}
+            <h2 style="color: var(--primary);">
+                {{ config['logo_texto'] }}
+            </h2>
+        {% endif %}
+        </div>
+
+        <nav class="menu-links">
+            <a href="#home">Home</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#portfolio">Projetos</a>
+        </nav>
+
+        <a href="/login" class="icon-login">
+            <i class="fa-solid fa-user"></i>
+        </a>
+
+    </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero">
+<h1>{{ config['titulo'] }}</h1>
+<a href="https://wa.me/{{ config['whatsapp'] }}" class="btn-main">
+Solicitar Orçamento
+</a>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="portfolio">
+<h2 class="section-title">Projetos Reais</h2>
+
+<div class="carousel-3d">
+{% for p in portfolio %}
+<div class="carousel-item">
+<a href="{{ p.link }}" target="_blank">
+<img src="{{ url_for('static', filename='uploads/' + p.imagem) }}">
+</a>
+</div>
+{% endfor %}
+</div>
+
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+<h2 class="section-title">Serviços Premium</h2>
+
+<div class="cards-grid">
+{% for s in servicos %}
+<div class="glass-card fade-up">
+<img src="{{ url_for('static', filename='uploads/' + s.imagem) }}">
+<h3>{{ s.nome }}</h3>
+<p>{{ s.descricao }}</p>
+<span class="price">{{ s.valor }}</span>
+<a href="https://wa.me/{{ config['whatsapp'] }}?text=Quero {{ s.nome }}" 
+   class="btn-glass">
+Agendar
+</a>
+</div>
+{% endfor %}
+</div>
+
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+
+<h2 class="section-title">Depoimentos</h2>
+
+<div class="cards-grid">
+
+{% for d in depoimentos %}
+<div class="glass-card depo-card">
+
+<div class="stars">
+{% for i in range(d.estrelas) %}
+<i class="fas fa-star"></i>
+{% endfor %}
+</div>
+
+<p class="depo-text">"{{ d.texto }}"</p>
+<strong class="depo-name">— {{ d.nome }}</strong>
+
+</div>
+{% endfor %}
+
+</div>
+
+<!-- FORMULARIO -->
+<div class="glass-box depo-form">
+<h3>Deixe seu depoimento</h3>
+
+<form method="POST" action="/enviar-depoimento">
+
+<input class="input-premium" type="text" name="nome" placeholder="Seu Nome" required>
+
+<textarea class="input-premium" name="texto" placeholder="Seu Depoimento" required></textarea>
+
+<select class="input-premium" name="estrelas">
+<option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+<option value="4">⭐⭐⭐⭐ Muito Bom</option>
+<option value="3">⭐⭐⭐ Bom</option>
+<option value="2">⭐⭐ Regular</option>
+<option value="1">⭐ Ruim</option>
+</select>
+
+<button class="btn-premium">Enviar Depoimento</button>
+
+</form>
+</div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="footer-glass">
+
+<div class="social-left">
+
+{% if config['instagram'] %}
+<a href="{{ config['instagram'] }}" target="_blank">
+<i class="fab fa-instagram"></i>
+</a>
+{% endif %}
+
+{% if config['facebook'] %}
+<a href="{{ config['facebook'] }}" target="_blank">
+<i class="fab fa-facebook"></i>
+</a>
+{% endif %}
+
+<a href="https://wa.me/{{ config['whatsapp'] }}" target="_blank">
+<i class="fab fa-whatsapp"></i>
+</a>
+
+</div>
+
+<p>© 2026 {{ config['logo_texto'] }} - Todos os direitos reservados</p>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
